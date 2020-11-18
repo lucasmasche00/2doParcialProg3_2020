@@ -7,7 +7,6 @@ use App\Models\Token;
 
 class UsuarioService
 {
-    //USADO
     public static function GenerarToken($request, $response, array $args)
     {
         $jSend = new JSend('error');
@@ -53,42 +52,6 @@ class UsuarioService
         return json_encode($jSend);
     }
 
-    public static function GetOne($request, $response, array $args)
-    {
-        $jSend = new JSend('error');
-        $email = $args['email'] ?? '';
-        if($email !== '')
-        {
-            $lista = Usuario::GetAll();
-            
-            if(Usuario::IsInList($lista, $email))
-            {
-                $user = Usuario::FindById($lista, $email);
-                
-                $jSend->status = 'success';
-                $jSend->data->mensajeExito = $user;
-            }
-            else
-            {
-                $jSend->message = 'No hay usuario con ese email';
-            }
-        }
-        else
-        {
-            $jSend->message = 'Email valido requerido';
-        }
-        return json_encode($jSend);
-    }
-
-    public static function GetAll($request, $response, array $args)
-    {
-        $jSend = new JSend('success');
-        $jSend->data->usuarios = Usuario::GetAll();
-            
-        return json_encode($jSend);
-    }
-
-    //USADO
     public static function Insert($request, $response, $args)
     {
         $jSend = new JSend('error');
@@ -149,111 +112,6 @@ class UsuarioService
             else
             {
                 $jSend->message = 'Nombre valido requerido (sin espacios)';
-            }
-        }
-        else
-        {
-            $jSend->message = 'Email valido requerido';
-        }
-        return json_encode($jSend);
-    }
-    
-    public static function Update($request, $response, array $args)
-    {
-        $jSend = new JSend('error');
-        $params = $request->getParsedBody();
-        $email = $args['email'] ?? '';
-        if($email !== '')
-        {
-            $clave = $params['clave'] ?? '';
-            if($clave !== '')
-            {
-                $tipo = $params['tipo'] ?? '';
-                if($tipo === 'admin' || $tipo === 'user')
-                {
-                    $lista = Usuario::GetAll();
-                    
-                    if(Usuario::IsInList($lista, $email))
-                    {
-                        $file = $_FILES['foto'] ?? null;
-                    
-                        if(!is_null($file))
-                        {
-                            $oldUser = Usuario::FindById($lista, $email);
-
-                            $foto = Archivo::ModificarArchivo($file, $oldUser->foto);
-                            if($foto !== false)
-                            {
-                                $user = Usuario::Constructor($email, $clave, $tipo, $foto);
-
-                                $user->Update();
-                                                
-                                $jSend->status = 'success';
-                                $jSend->data->mensajeExito = 'Modificacion exitosa';
-                            }
-                            else
-                            {
-                                $jSend->message = 'Error al guardar la foto';
-                            }
-                        }
-                        else
-                        {
-                            $jSend->message = 'Foto valida requerida';
-                        }
-                    }
-                    else
-                    {
-                        $jSend->message = 'Email no encontrado';
-                    }
-                }
-                else
-                {
-                    $jSend->message = 'Tipo valida requerido: admin o user';
-                }
-            }
-            else
-            {
-                $jSend->message = 'Clave valida requerida';
-            }
-        }
-        else
-        {
-            $jSend->message = 'Email valido requerido';
-        }
-        return json_encode($jSend);
-    }
-    
-    public static function Delete($request, $response, array $args)
-    {
-        $jSend = new JSend('error');
-        $params = $request->getParsedBody();
-        $email = $args['email'] ?? '';
-        if($email !== '')
-        {
-            $lista = Usuario::GetAll();
-            
-            if(Usuario::IsInList($lista, $email))
-            {
-                $oldUser = Usuario::FindById($lista, $email);
-
-                $foto = Archivo::BorrarArchivo($oldUser->foto);
-                if($foto !== false)
-                {
-                    $user = Usuario::Constructor($email, $oldUser->clave, $oldUser->tipo, $oldUser->foto);
-
-                    $user->Delete();
-                                    
-                    $jSend->status = 'success';
-                    $jSend->data->mensajeExito = 'Borrado exitoso';
-                }
-                else
-                {
-                    $jSend->message = 'Error al borrar la foto';
-                }
-            }
-            else
-            {
-                $jSend->message = 'Email no encontrado';
             }
         }
         else
