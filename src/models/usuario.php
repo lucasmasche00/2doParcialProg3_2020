@@ -112,26 +112,5 @@ class Usuario
         $query->execute();
         return $objetoAccesoDato->RetornarUltimoIdInsertado();
     }
-
-    // public function Update()
-    // {
-    //     $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-    //     $query = $objetoAccesoDato->RetornarConsulta("UPDATE usuarios SET clave = :clave, tipo = :tipo, nombre = :nombre WHERE email = :email");
-    //     $query->bindValue(':email',$this->email, PDO::PARAM_STR);
-    //     $query->bindValue(':clave', $this->clave, PDO::PARAM_STR);
-    //     $query->bindValue(':tipo', $this->tipo, PDO::PARAM_STR);
-    //     $query->bindValue(':nombre', $this->nombre, PDO::PARAM_STR);
-    //     $query->execute();
-    //     return $objetoAccesoDato->RetornarUltimoIdInsertado();
-    // }
-    
-    // public function Delete()
-    // {
-    //     $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso();
-    //     $query = $objetoAccesoDato->RetornarConsulta("DELETE FROM usuarios WHERE email = :email");
-    //     $query->bindValue(':email',$this->email, PDO::PARAM_STR);
-    //     $query->execute();
-    //     return $objetoAccesoDato->RetornarUltimoIdInsertado();
-    // }
 }
 ?>
